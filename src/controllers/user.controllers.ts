@@ -1,6 +1,7 @@
 import express from 'express'
 
 import {User} from '../models/user.entity'
+import {userSchema} from '../schemas/user.schema'
 
 const userRouter = express.Router()
 
@@ -15,12 +16,16 @@ userRouter.get('/:id([0-9]+)', async (req, res) => {
 })
 
 userRouter.post('/', async (req, res) => {
-  const user = User.create({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-  })
-  await user.save()
-  return res.status(201).json(user)
+  const body = req.body
+  const schema = userSchema.safeParse(body)
+
+  if (!schema.success) {
+    res.status(400).json(schema.error.flatten())
+  } else {
+    const user = User.create({...schema.data})
+    await user.save()
+    res.status(201).json(user)
+  }
 })
 
 export default userRouter
