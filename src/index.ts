@@ -4,12 +4,14 @@ import {DataSource} from 'typeorm'
 import bodyParser from 'body-parser'
 
 import models from './models'
+import swaggerDocs from './docs/swagger.docs'
 import userRouter from './controllers/user.controllers'
 
 const app = express()
 
 app.use(bodyParser.json())
 app.use('/user', userRouter)
+app.use('/api-docs', ...swaggerDocs)
 
 const db = new DataSource({
   type: 'sqlite',
