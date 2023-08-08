@@ -6,7 +6,7 @@ import {
   OneToMany,
 } from 'typeorm'
 
-import {Todo} from './todo.entity'
+import { Todo } from './todo.entity'
 
 @Entity()
 export class User extends BaseEntity {
@@ -21,4 +21,8 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Todo, (todo) => todo.user)
   todos: Todo[]
+
+  getObject() {
+    return { ...this, other: 'others' }
+  }
 }

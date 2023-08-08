@@ -1,7 +1,7 @@
 import express from 'express'
 
-import {User} from '../models/user.entity'
-import {userSchema} from '../schemas/user.schema'
+import { User } from '../models/user.entity'
+import { userSchema } from '../schemas/user.schema'
 
 const userRouter = express.Router()
 
@@ -11,8 +11,8 @@ userRouter.get('/', async (req, res) => {
 })
 
 userRouter.get('/:id([0-9]+)', async (req, res) => {
-  const user = await User.findBy({id: Number(req.params.id)})
-  return res.json(user[0])
+  const user = await User.findOneBy({ id: Number(req.params.id) })
+  return res.json(user)
 })
 
 userRouter.post('/', async (req, res) => {
@@ -22,7 +22,7 @@ userRouter.post('/', async (req, res) => {
   if (!schema.success) {
     res.status(400).json(schema.error.flatten())
   } else {
-    const user = User.create({...schema.data})
+    const user = User.create(schema.data as User)
     await user.save()
     res.status(201).json(user)
   }

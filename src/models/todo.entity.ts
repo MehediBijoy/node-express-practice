@@ -6,7 +6,7 @@ import {
   ManyToOne,
 } from 'typeorm'
 
-import {User} from './user.entity'
+import { User } from './user.entity'
 
 @Entity()
 export class Todo extends BaseEntity {
@@ -16,7 +16,7 @@ export class Todo extends BaseEntity {
   @Column()
   title: string
 
-  @Column({default: false})
+  @Column({ default: false })
   status: boolean
 
   @ManyToOne(() => User, (user) => user.id)
