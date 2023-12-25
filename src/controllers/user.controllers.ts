@@ -1,5 +1,6 @@
 import express from 'express'
 
+import { paramValidate } from '../middleware'
 import { User } from '../models/user.entity'
 import { userSchema } from '../schemas/user.schema'
 
@@ -15,17 +16,8 @@ userRouter.get('/:id([0-9]+)', async (req, res) => {
   return res.json(user)
 })
 
-userRouter.post('/', async (req, res) => {
-  const body = req.body
-  const schema = userSchema.safeParse(body)
-
-  if (!schema.success) {
-    res.status(400).json(schema.error.flatten())
-  } else {
-    const user = User.create(schema.data as User)
-    await user.save()
-    res.status(201).json(user)
-  }
+userRouter.post('/', paramValidate(userSchema), async (req, res) => {
+  return res.json(req.body)
 })
 
 export default userRouter
